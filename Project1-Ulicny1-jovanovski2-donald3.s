@@ -85,6 +85,18 @@ b1:     bgt $a2,$a1,b2          # else if x > y
 L1:     addi $t0,$t0,-1         # i--; (decrease iter)
 # Perform modulator 
 # if (x%i && y%i) {return i}
+        div $a1, $a2            # divide x by y
+        mfhi $s0                # x % y = $s0
+        sw $s0, 0($sp)          #remainder being saved
+        bne $s0, $zero, L2      #if $s0 != 0, then recurse
+        
+        add $v0, $a2, $zero     #y holds the result, storing it in $v0
+        jr $ra                  #return
+L2:
+        add $a1, $a2, $zero     #set x and y equal to zero
+        lw $s0, 0($sp)          #loading the remainder
+        add $a2, $s0, $zero     #set y to the remainder
+        jal gcd
 
 #                               # else (if y > x by process of elim)
 b2:     move $t0,$a1            # i = x;
