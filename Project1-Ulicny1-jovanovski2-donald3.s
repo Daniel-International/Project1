@@ -83,14 +83,14 @@ gcd:
 b1:     bgt $a2,$a1,b2          # else if x > y
         move $t0,$a2            # (i = y;
 L1:     addi $t0,$t0,-1         # i--;
-        blt  $t0,$zero,Return   # 
+        blt  $t0,$zero,Return   # if no GCD exists show message and return
 
 
 
 b2:                             # else (if y > x by process of elim)
 
 
-
+        blt $t0,$zero,Return    # if no GCD exists show message and return
 
 Error:  li  $v0, 4          # set syscall to print string
         la  $a0, msgError   # set msgError to be printed
