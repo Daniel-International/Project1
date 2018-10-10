@@ -81,16 +81,21 @@ gcd:
         move $v0,$a1            # set $v0 to x and return
         jr  $ra
 b1:     bgt $a2,$a1,b2          # else if x > y
-        move $t0,$a2            # (i = y;
-L1:     addi $t0,$t0,-1         # i--;
-        blt  $t0,$zero,Return   # if no GCD exists show message and return
+        move $t0,$a2            # i = y;
+L1:     addi $t0,$t0,-1         # i--; (decrease iter)
+# Perform modulator 
+# if (x%i && y%i) {return i}
+
+#                               # else (if y > x by process of elim)
+b2:     move $t0,$a1            # i = x;
+# Perform modulator
+# if (x%i && y%i) {return i}
+#
+# we return i by moving it into $v0 and performaing a jr $ra instruction.
+# the main funciton will handle the rest
 
 
 
-b2:                             # else (if y > x by process of elim)
-
-
-        blt $t0,$zero,Return    # if no GCD exists show message and return
 
 Error:  li  $v0, 4          # set syscall to print string
         la  $a0, msgError   # set msgError to be printed
@@ -99,11 +104,6 @@ Error:  li  $v0, 4          # set syscall to print string
         li  $v0, 0          # set v0 to "false"
         jr  $ra
 
-Return: li  $v0, 4          # set syscall to print string
-        la  $a0, msgDNE     # set msgDNE to be printed
-        syscall             # print "There exists no gcd"
-        li  $v0, 0          # set v0 to "false"
-        jr  $ra
 
 
 ################################################################
